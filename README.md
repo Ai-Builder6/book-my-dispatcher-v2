@@ -12,7 +12,7 @@ Executive Contact & Admin: `cleaningserviceyeg@gmail.com`
 
 - **15 Mobile Cleaners & Solo/Team Units**: Tracking real home hubs in Edmonton (Chappelle, Charlesworth, Keheewin, Oliver, Clareview, Ambleside, Mill Woods, Queen Mary, Secord, Callingwood, Dechene, Westwood, Lorelei, The Hamptons, Jasper Park).
 - **Core Cleaning Services**: Standard Cleaning, Deep Cleaning, and Move-Out Cleaning.
-- **Interactive Google Maps Territory Engine**: Live fleet coordinates, real-time vehicle status (On Duty / Available / Off Duty), pin clustering, and Depot Hub addresses with Google Places autocompletion.
+- **Interactive Google Maps Territory Engine**: Live fleet coordinates, real-time vehicle status (On Duty / Available / Off Duty), pin clustering, and Depot Hub addresses with Google Places autocomplete.
 - **Fleet & Van Hub Configuration**: Direct vehicle identifier re-naming, cleaner driver assignment, color branding, and forward geocoding.
 - **Dual-Layer Real-Time Persistence**:
   - Local resilient JSON database (`data/dispatch_store.json`).
@@ -80,7 +80,7 @@ npm start
 
 This application includes official **Jobber OAuth 2.0 two-way connection support** with live GraphQL integration for calendar visits, client database records, quotes, and billing invoices.
 
-> **Safety Guarantee**: Imports are safe and verified. Successful syncs refresh your live dispatch board; failed syncs preserve existing data and show a clear error message. **No automatic destructive data wipe occurs**.
+> **Safety Guarantee**: Imports are safe and verified. Successful syncs refresh your live dispatch board; failed syncs preserve existing data and show a clear error message. **No automatic destructive changes are sent to your real Jobber account.**
 
 ### Jobber Developer Center Settings:
 - **Jobber Developer Center**: [https://developer.getjobber.com](https://developer.getjobber.com)
@@ -100,10 +100,10 @@ This application includes official **Jobber OAuth 2.0 two-way connection support
 3. Click **Open Jobber in New Tab (Direct) →** (or copy the direct authorization link).
 4. On the Jobber webpage, log in with your Jobber business credentials.
 5. On the permissions screen, scroll to the bottom and click the green **"Allow Access"** button.
-6. Jobber redirects to `https://app.tidyupscleaning.com/api/jobber/oauth/callback`, exchanges the authorization code for your access token, saves the credentials, and automatically returns you to the dispatch board.
+6. Jobber redirects to `https://app.tidyupscleaning.com/api/jobber/oauth/callback`, exchanges the authorization code for your access token, saves the credentials, and automatically returns you to the Dispatch Board with a green "Connected to Jobber!" confirmation!
 
 ### Direct Token Method (Instant Alternative):
-If you prefer not to use OAuth, you can also generate a **Personal Access Token** in your [Jobber Developer Center](https://developer.getjobber.com) and paste it into the **Direct Personal Access Token** field in the app.
+If you prefer not to use OAuth, you can also generate a **Personal Access Token** in your [Jobber Developer Center](https://developer.getjobber.com) and paste it into the **Direct Personal Access Token** field in the modal. Click **Test & Verify Token** to immediately connect.
 
 ---
 

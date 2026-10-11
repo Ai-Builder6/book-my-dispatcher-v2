@@ -91,6 +91,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (apiKey) {
     try {
+      // Biased to Edmonton (Lat: 53.5461, Lng: -113.4938), radius 45km, Canada
       const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
         input
       )}&location=53.5461,-113.4938&radius=45000&components=country:ca&key=${apiKey}&solution_id=gmp_mcp_codeassist_v1_aistudio`;
@@ -119,6 +120,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
+  // Always return instantaneous matching Edmonton predictions
   const local = getLocalPredictions(input);
   return res.status(200).json({ predictions: local });
 }
