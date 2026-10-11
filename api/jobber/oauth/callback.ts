@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Only accept GET requests for OAuth callback
   if (req.method !== "GET") {
     return res.status(405).send("Method Not Allowed");
   }
@@ -10,6 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const errorDescription = (req.query.error_description as string) || "";
   const stateParam = (req.query.state as string) || "";
 
+  // Derive redirectUri: priority to state payload, fallback to custom domain
   let redirectUri = "https://app.tidyupscleaning.com/api/jobber/oauth/callback";
   if (stateParam) {
     try {
@@ -18,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         redirectUri = decoded.redirectUri;
       }
     } catch {
-      // keep default
+      // If state is plain string (e.g. 'tidyups_auth'), keep default
     }
   }
 
@@ -32,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Jobber Authorization Failed</title>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #0f172a; }
             .card { background: white; padding: 36px 32px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; max-width: 440px; border: 1px solid #fee2e2; }
             .badge { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #fef2f2; color: #dc2626; border-radius: 50%; margin-bottom: 16px; font-size: 28px; }
             h2 { color: #dc2626; margin: 0 0 8px 0; font-size: 20px; font-weight: 700; }
@@ -109,7 +111,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <meta charset="UTF-8" />
             <title>Jobber Token Exchange Failed</title>
             <style>
-              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f8fafc; }
+              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f8fafc; padding: 20px; box-sizing: border-box; }
               .card { background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; max-width: 520px; border: 1px solid #fee2e2; }
               pre { text-align: left; background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 12px; overflow-x: auto; }
               .btn { display: inline-block; background: #0284c7; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 16px; }
@@ -128,6 +130,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `);
     }
 
+    // Attempt to fetch company name from Jobber GraphQL API
     let accountName = "Tidyups Cleaning Service Inc";
     try {
       const accountRes = await fetch("https://api.getjobber.com/api/graphql", {
@@ -146,7 +149,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         accountName = accountJson.data.account.name;
       }
     } catch {
-      // Nothing
+      // Non-critical
     }
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -158,9 +161,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Jobber Connected Successfully</title>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #0f172a; }
             .card { background: white; padding: 36px 32px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; max-width: 440px; border: 1px solid #e2e8f0; }
-            .badge { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #ecfdf5; color: #059669; border-radius: 50%; margin-bottom: 16px; font-size: 30px; }
+            .badge { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #ecfdf5; color: #059669; border-radius: 50%; margin-bottom: 16px; font-size: 28px; }
             h2 { color: #059669; margin: 0 0 8px 0; font-size: 20px; font-weight: 700; }
             p { color: #64748b; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
             .account { display: inline-block; background: #f1f5f9; padding: 6px 14px; border-radius: 8px; font-weight: 600; color: #334155; font-size: 13px; margin-bottom: 20px; }
